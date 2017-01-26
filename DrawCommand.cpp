@@ -1,8 +1,3 @@
-//
-// Created by david on 1/26/17.
-//
-
-
 #include "DrawCommand.h"
 #include <iostream>
 

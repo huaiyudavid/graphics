@@ -1,7 +1,3 @@
-//
-// Created by david on 1/26/17.
-//
-
 #ifndef GRAPHICS_READCOMMAND_H
 #define GRAPHICS_READCOMMAND_H
 

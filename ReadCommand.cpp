@@ -1,7 +1,3 @@
-//
-// Created by david on 1/26/17.
-//
-
 #include <fstream>
 #include <iostream>
 
