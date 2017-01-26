@@ -213,7 +213,7 @@ main_loop(char line[])
     } else {
         std::string lineStr(line);
         if (cli.isCommand(lineStr)) {
-            Command* com = cli.parseCommand(lineStr);
+            Command* com = cli.parseCommand(lineStr, false);
             if (com != nullptr) {
                 com->execute();
             }

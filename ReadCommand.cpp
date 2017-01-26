@@ -18,7 +18,7 @@ void ReadCommand::execute() const {
         while (std::getline(file, line))
         {
             if (cli.isCommand(line)) {
-                Command* com = cli.parseCommand(line);
+                Command* com = cli.parseCommand(line, true);
                 if (com != nullptr) {
                     com->execute();
                 }

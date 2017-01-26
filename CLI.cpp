@@ -16,7 +16,7 @@ bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
 }
 
-Command* CLI::parseCommand(std::string& line) {
+Command* CLI::parseCommand(std::string& line, bool inFile) {
     std::vector<std::string> tokens = tokenizer.tokenize(line, ", \t");
     std::string name = tokens[0];
     tolower(name);
@@ -63,6 +63,11 @@ Command* CLI::parseCommand(std::string& line) {
             if (tokens.size() > 2) {
                 std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+            if (inFile) {
+                filename = prefix + filename;
+            } else {
+                prefix = filename.substr(0, filename.find_last_of("/") + 1);;
             }
             return new ReadCommand(filename, *this);
         } else {
