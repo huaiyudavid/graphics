@@ -8,6 +8,8 @@
 
 #include "CLI.h"
 #include "MoveCommand.h"
+#include "DrawCommand.h"
+#include "ColorCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -50,9 +52,9 @@ Command* CLI::parseCommand(std::string& line) {
         if (name == "move") {
             return new MoveCommand(params);
         } else if (name == "draw") {
-            return nullptr;
-        } else {
-            return nullptr;
+            return new DrawCommand(params);
+        } else {    // color
+            return new ColorCommand(params);
         }
     } else if (name == "read"){
 
