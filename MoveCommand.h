@@ -9,6 +9,9 @@
 
 #include "Command.h"
 
+/*
+ * Represents the move command.
+ */
 class MoveCommand : public Command {
 public:
     MoveCommand(std::vector<double>& p);

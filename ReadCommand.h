@@ -8,6 +8,10 @@
 #include "Command.h"
 #include "CLI.h"
 
+/*
+ * Represents the read command. Reads the file from filename and executes all command within
+ * the file. Recursively executes.
+ */
 class ReadCommand : public Command {
 public:
     ReadCommand(std::string& file, CLI& mainCLI);

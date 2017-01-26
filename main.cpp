@@ -211,6 +211,7 @@ main_loop(char line[])
         printf("Exiting...\n");
         exit(0);
     } else {
+        // Process command
         std::string lineStr(line);
         if (cli.isCommand(lineStr)) {
             Command* com = cli.parseCommand(lineStr, false);

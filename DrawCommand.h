@@ -9,6 +9,9 @@
 
 #include "Command.h"
 
+/*
+ * Represents the draw command.
+ */
 class DrawCommand : public Command {
 public:
     DrawCommand(std::vector<double>& p);

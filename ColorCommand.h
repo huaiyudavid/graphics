@@ -9,6 +9,9 @@
 
 #include "Command.h"
 
+/*
+ * Represents the color command.
+ */
 class ColorCommand : public Command {
 public:
     ColorCommand(std::vector<double>& p);
