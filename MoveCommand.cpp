@@ -5,7 +5,7 @@
 #include "MoveCommand.h"
 #include <iostream>
 
-MoveCommand::MoveCommand(std::vector<double> p): name("move"), params(p) {}
+MoveCommand::MoveCommand(std::vector<double>& p): name("move"), params(p) {}
 
 void MoveCommand::execute() const {
     std::cout << toString() << std::endl;

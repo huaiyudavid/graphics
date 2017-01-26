@@ -5,7 +5,7 @@
 #include "ColorCommand.h"
 #include <iostream>
 
-ColorCommand::ColorCommand(std::vector<double> p): name("color"), params(p) {}
+ColorCommand::ColorCommand(std::vector<double>& p): name("color"), params(p) {}
 
 void ColorCommand::execute() const {
     std::cout << toString() << std::endl;

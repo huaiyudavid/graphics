@@ -6,7 +6,7 @@
 #include "DrawCommand.h"
 #include <iostream>
 
-DrawCommand::DrawCommand(std::vector<double> p): name("draw"), params(p) {}
+DrawCommand::DrawCommand(std::vector<double>& p): name("draw"), params(p) {}
 
 void DrawCommand::execute() const {
     std::cout << toString() << std::endl;

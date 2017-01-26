@@ -38,6 +38,8 @@ GLubyte checkImage[checkImageHeight][checkImageWidth][3];
 
 static GLint height;
 
+CLI cli;
+
 void
 makeCheckImage(void)
 {
@@ -209,7 +211,6 @@ main_loop(char line[])
         printf("Exiting...\n");
         exit(0);
     } else {
-        CLI cli;
         std::string lineStr(line);
         if (cli.isCommand(lineStr)) {
             Command* com = cli.parseCommand(lineStr);
@@ -218,8 +219,6 @@ main_loop(char line[])
             }
             delete com;
         }
-
-        printf("ORIGINAL: %s\n",line);
     }
 
     printf("CLI> ");

@@ -10,6 +10,7 @@
 #include "MoveCommand.h"
 #include "DrawCommand.h"
 #include "ColorCommand.h"
+#include "ReadCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -57,7 +58,17 @@ Command* CLI::parseCommand(std::string& line) {
             return new ColorCommand(params);
         }
     } else if (name == "read"){
-
+        if (tokens.size() > 1) {
+            std::string filename = tokens[1];
+            if (tokens.size() > 2) {
+                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+            return new ReadCommand(filename, *this);
+        } else {
+            std::cout << "Error: Please provide a filename in line \"" << line << "\"" << std::endl;
+            return nullptr;
+        }
     }
 
     return nullptr;
