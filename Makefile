@@ -24,8 +24,10 @@ all: main
 
 CLI_OBJECTS=main.o Tokenizer.o MoveCommand.o DrawCommand.o ColorCommand.o ReadCommand.o Command.o CLI.o
 
-main: $(CLI_OBJECTS)
-	$(LINK) $(CLI_OBJECTS) $(LDADD) $(LIBS)
+TIFF_OBJECTS=Utilities.o TiffStatCommand.o
+
+main: $(CLI_OBJECTS) $(TIFF_OBJECTS)
+	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(LDADD) $(LIBS)
 
 clean:
 	-rm -f *.o $(PROGRAMS)

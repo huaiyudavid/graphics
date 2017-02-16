@@ -1,7 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "TiffStatCommand.h"
-#include "Utilities.cpp"
+#include "Utilities.h"
 
 TiffStatCommand::TiffStatCommand(std::string& file): name("tiffstat"), filename(file) {
     tagnames[254] = "NewSubfileType";
@@ -82,117 +82,156 @@ TiffStatCommand::TiffStatCommand(std::string& file): name("tiffstat"), filename(
 
 
 void TiffStatCommand::execute() const {
-    bool swap = false;
-    bool isBigEndian = false;
-
-
-    uint16_t endianness; // 2 byte quantity
-    uint16_t magicno; // 2 byte quantity
-    uint32_t ifdaddress; // 4 byte quantity
-    uint16_t ifdcount; // 2 byte quantity
     std::ifstream imfile;
     imfile.open (filename, std::ios::binary );
-    imfile.seekg (0, std::ios::beg); //not strictly necessary, but a good idea
-    imfile.read ((char *)&endianness, 2);
-    if (endianness == 0x4d4d) {
-        isBigEndian = true;
-    } else if (endianness != 0x4949) {
-        // TODO: handle error
-    }
-    if (isBigEndian != is_big_endian()) {
-        swap = true;
-    }
+    if (imfile.is_open()) {
+        try {
+            std::cout << toString() << ":" << std::endl;
 
-    readEndian(imfile, (char *)&magicno, 2, swap);
-    if (magicno != 42) {
-        // TODO: handle error
-    }
+            bool swap = false;
+            bool isBigEndian = false;
 
-    readEndian(imfile, (char *)&ifdaddress, 4, swap);
+            uint16_t endianness; // 2 byte quantity
+            uint16_t magicno; // 2 byte quantity
+            uint32_t ifdaddress; // 4 byte quantity
+            uint16_t ifdcount; // 2 byte quantity
 
-    // go to IFD position
-    imfile.seekg(ifdaddress, std::ios::beg);
-    readEndian(imfile, (char *)&ifdcount, 2, swap);
+            imfile.seekg (0, std::ios::beg); //not strictly necessary, but a good idea
 
-    for (uint16_t i = 0; i < ifdcount; i++) {
-        uint16_t tag;
-        uint16_t type;
-        uint32_t count;
-        readEndian(imfile, (char *)&tag, 2, swap);
-        readEndian(imfile, (char *)&type, 2, swap);
-        readEndian(imfile, (char *)&count, 4, swap);
-
-        if (type < 3 && count < 5 || type == 3 && count < 3 || type == 4 && count == 1) { // values fit in the offset slot
-            if (type == 1) {
-                uint8_t value;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&value, 1, swap);
-                }
-                uint32_t junk;
-                readEndian(imfile, (char *)&junk, 4 - count, swap);
-            } else if (type == 2) {
-                char values[count];
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, values, 1, swap);
-                }
-                uint32_t junk;
-                readEndian(imfile, (char *)&junk, 4 - count, swap);
-            } else if (type == 3) {
-                uint16_t value;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&value, 2, swap);
-                }
-                uint32_t junk;
-                readEndian(imfile, (char *)&junk, 4 - 2*count, swap);
-            } else if (type == 4) {
-                uint32_t value;
-                readEndian(imfile, (char *)&value, 4, swap);
+            // match endianness
+            imfile.read ((char *)&endianness, 2);
+            if (endianness == 0x4d4d) {
+                isBigEndian = true;
+            } else if (endianness != 0x4949) {
+                std::cout << "Error: Invalid TIFF format - cannot determine endianness" << std::endl;
+                imfile.close();
+                return;
             }
-        } else {    // values don't fit in the offset slot
-            uint32_t offset;
-            readEndian(imfile, (char *)&offset, 4, swap);
-            std::streampos prevPos = imfile.tellg();
-            imfile.seekg(offset, std::ios::beg);
-            if (type == 1) {
-                uint8_t value;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&value, 1, swap);
-                }
-            } else if (type == 2) {
-                char values[count];
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, values, 1, swap);
-                }
-            } else if (type == 3) {
-                uint16_t value;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&value, 2, swap);
-                }
-            } else if (type == 4) {
-                uint32_t value;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&value, 4, swap);
-                }
-            } else if (type == 5) {
-                uint32_t numer;
-                uint32_t denom;
-                for (uint32_t j = 0; j < count; j++) {
-                    readEndian(imfile, (char *)&numer, 4, swap);
-                    readEndian(imfile, (char *)&denom, 4, swap);
-                }
+            if (isBigEndian != is_big_endian()) {
+                swap = true;
             }
-            imfile.seekg(prevPos, std::ios::beg);
+
+            std::cout << "Endian: 0x" << std:: hex << endianness << "\n";
+
+            readEndian(imfile, (char *)&magicno, 2, swap);
+            if (magicno != 42) {
+                std::cout << "Error: Not a TIFF file, magic number incorrect" << std::endl;
+                imfile.close();
+                return;
+            }
+
+            std::cout << "Magic: " << std::dec << magicno << "\n";
+
+            readEndian(imfile, (char *)&ifdaddress, 4, swap);
+
+            std::cout << "Directory 0: offset 0x" << std::hex << ifdaddress << " next 0" << std::endl;
+
+            // go to IFD position
+            imfile.seekg(ifdaddress, std::ios::beg);
+            readEndian(imfile, (char *)&ifdcount, 2, swap);
+
+            for (uint16_t i = 0; i < ifdcount; i++) {
+                uint16_t tag;
+                uint16_t type;
+                uint32_t count;
+                readEndian(imfile, (char *)&tag, 2, swap);
+
+                std::cout << tagnames[tag] << " (" << std::dec << tag << ") ";
+
+                readEndian(imfile, (char *)&type, 2, swap);
+                readEndian(imfile, (char *)&count, 4, swap);
+
+                if ((type < 3 && count < 5) || (type == 3 && count < 3) || (type == 4 && count == 1)) { // values fit in the offset slot
+                    if (type == 1) {
+                        std::cout << "BYTE (1) " << count << "< ";
+                        uint8_t value;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&value, 1, swap);
+                            std::cout << value << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                        uint32_t junk;
+                        readEndian(imfile, (char *)&junk, 4 - count, swap);
+                    } else if (type == 2) {
+                        std::cout << "ASCII (2) " << count << "< ";
+                        char values[4];
+                        readEndian(imfile, values, count, swap);
+                        std::cout << values << " >" << std::endl;
+                        uint32_t junk;
+                        readEndian(imfile, (char *)&junk, 4 - count, swap);
+                    } else if (type == 3) {
+                        std::cout << "SHORT (3) " << count << "< ";
+                        uint16_t value;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&value, 2, swap);
+                            std::cout << value << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                        uint32_t junk;
+                        readEndian(imfile, (char *)&junk, 4 - 2*count, swap);
+                    } else if (type == 4) {
+                        uint32_t value;
+                        readEndian(imfile, (char *)&value, 4, swap);
+                        std::cout << "LONG (4) 1< " << value << " >" << std::endl;
+                    }
+                } else {    // values don't fit in the offset slot
+                    uint32_t offset;
+                    readEndian(imfile, (char *)&offset, 4, swap);
+                    std::streampos prevPos = imfile.tellg();
+                    imfile.seekg(offset, std::ios::beg);
+                    if (type == 1) {
+                        std::cout << "BYTE (1) " << count << "< ";
+                        uint8_t value;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&value, 1, swap);
+                            std::cout << value << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                    } else if (type == 2) {
+                        std::cout << "ASCII (2) " << count << "< ";
+                        char *values = new char[count];
+                        readEndian(imfile, values, count, swap);
+                        std::cout << values << " >" << std::endl;
+                        delete[] values;
+                    } else if (type == 3) {
+                        std::cout << "SHORT (3) " << count << "< ";
+                        uint16_t value;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&value, 2, swap);
+                            std::cout << value << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                    } else if (type == 4) {
+                        std::cout << "LONG (4) " << count << "< ";
+                        uint32_t value;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&value, 4, swap);
+                            std::cout << value << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                    } else if (type == 5) {
+                        std::cout << "RATIONAL (5) " << count << "< ";
+                        uint32_t numer;
+                        uint32_t denom;
+                        for (uint32_t j = 0; j < count; j++) {
+                            readEndian(imfile, (char *)&numer, 4, swap);
+                            readEndian(imfile, (char *)&denom, 4, swap);
+                            std::cout << numer << "/" << denom << " ";
+                        }
+                        std::cout << ">" << std::endl;
+                    }
+                    imfile.seekg(prevPos, std::ios::beg);
+                }
+
+            }
+            imfile.close();
+        } catch (std::exception ex) {
+            imfile.close();
+            std::cout << "Error: unable to read file as TIFF format" << std::endl;
         }
-
+    } else {
+        std::cout << "Error: invalid file name \"" << filename << "\"" << std::endl;
     }
-
-
-
-    imfile.close();
-    std::cout << "Endian: " << std::hex << endianness << "\n";
-    std::cout << "Magic: " << magicno << "\n";
-    std::cout << "IFD Address: " << ifdaddress << "\n";
-    std::cout << "IFD Count: " << ifdcount << "\n";
 }
 
 std::string TiffStatCommand::toString() const {
