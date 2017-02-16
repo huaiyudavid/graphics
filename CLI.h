@@ -11,7 +11,7 @@
 class CLI {
 public:
     // Constructor
-    CLI(): tokenizer(), prefix("") {}
+    CLI(): tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
 
     /*
      * method: isCommand
@@ -42,6 +42,10 @@ private:
     // Path to append to filenames within directories
     // Allows for file reading in other directories
     std::string prefix;
+
+    size_t totalReads;
+
+    const size_t MAX_READS;
 };
 
 #endif //GRAPHICS_CLI_H

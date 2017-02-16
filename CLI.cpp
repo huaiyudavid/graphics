@@ -13,10 +13,18 @@ bool CLI::isCommand(std::string& line) {
 }
 
 Command* CLI::parseCommand(std::string& line, bool inFile) {
+    std::string commands[] = {"move", "draw", "color", "read", "tiffread", "tiffstat", "tiffwrite"};
     std::vector<std::string> tokens = tokenizer.tokenize(line, ", \t");
     std::string name = tokens[0];
     tolower(name);
-    if (name != "move" && name != "draw" && name != "color" && name != "read") {
+    bool invalidCommand = true;
+    for (const std::string& command : commands) {
+        if (name == command) {
+            invalidCommand = false;
+            break;
+        }
+    }
+    if (invalidCommand) {
         std::cout << "Error: command " << name << " not found in line \"" << line << "\"" << std::endl;
         return nullptr;
     }
@@ -54,6 +62,12 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             return new ColorCommand(params);
         }
     } else if (name == "read"){
+        if (totalReads >= MAX_READS) {
+            std::cout << "Maximum number of reads exceeded (" << MAX_READS << ")" << std::endl;
+            std::cout << "Please check for infinite recursion among files" << std::endl;
+            return nullptr;
+        }
+
         if (tokens.size() > 1) {
             std::string filename = tokens[1];
             if (tokens.size() > 2) {
@@ -65,6 +79,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             } else {
                 prefix = filename.substr(0, filename.find_last_of("/") + 1);;
             }
+            totalReads++;
             return new ReadCommand(filename, *this);
         } else {
             std::cout << "Error: Please provide a filename in line \"" << line << "\"" << std::endl;
