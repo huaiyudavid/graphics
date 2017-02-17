@@ -1,3 +1,5 @@
 .idea/
 cmake-build-debug/
 *.o
+images/eeyoretestimg.tif
+images/playtestimg.tif

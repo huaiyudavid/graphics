@@ -87,8 +87,6 @@ void TiffWriteCommand::execute() {
             type = 3;
             count = 1;
             offset = cli.imageData.compression;
-            std::cout << "compression: " << cli.imageData.compression << std::endl;
-            std::cout << "offset: " << offset << std::endl;
             writeIFDEntry(imfile, tag, type, count, offset);
 
             // PhotometricInterpretation
@@ -108,15 +106,15 @@ void TiffWriteCommand::execute() {
             // Write Image Data
             std::streampos prevPos = imfile.tellp();
             imfile.seekp(afterifd, std::ios::beg);
-            for (uint32_t row = x0; row < xc; row++) {
-                for (uint32_t col = y0; col < yc; col++) {
+            for (uint32_t row = y0; row < yc; row++) {
+                for (uint32_t col = x0; col < xc; col++) {
                     if (cli.imageData.isGrayscale) {
-                        uint8_t value = checkImage[imageHeight-row-1][col][0];
+                        uint8_t value = checkImage[xc-row-1][col][0];
                         imfile.write((char *)&value, 1);
                     } else {
-                        uint8_t red = checkImage[imageHeight-row-1][col][0];
-                        uint8_t green = checkImage[imageHeight-row-1][col][1];
-                        uint8_t blue = checkImage[imageHeight-row-1][col][2];
+                        uint8_t red = checkImage[cli.imageData.imageLength-row-1][col][0];
+                        uint8_t green = checkImage[cli.imageData.imageLength-row-1][col][1];
+                        uint8_t blue = checkImage[cli.imageData.imageLength-row-1][col][2];
                         imfile.write((char *)&red, 1);
                         imfile.write((char *)&green, 1);
                         imfile.write((char *)&blue, 1);

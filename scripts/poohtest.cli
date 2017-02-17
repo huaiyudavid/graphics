@@ -1,0 +1,5 @@
+tiffstat ../images/pooh.tif
+tiffread ../images/pooh.tif
+tiffstat ../images/pooh_le.tif
+tiffread ../iamges/pooh_le.tif
+

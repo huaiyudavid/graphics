@@ -1,0 +1,12 @@
+TiffStat ../images/eeyore.tif
+TiffRead ../images/eeyore.tif
+TiffWrite ../images/eeyoretestimg.tif 0 0 125 125
+TiffRead ../images/eeyoretestimg.tif
+TiffStat ../images/eeyoretestimg.tif
+Tiffstat ../images/eeyore2.tif
+TiffRead ../images/eeyore2.tif
+TiffSTat ../images/eeyore3.tif
+TiffRead ../images/eeyore3.tif
+TiffStat ../images/eeyore4.tif
+TiffRead ../images/eeyore4.tif
+

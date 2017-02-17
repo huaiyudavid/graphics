@@ -1,0 +1,11 @@
+tiffstat ../images/p4_faces.tif
+tiffread ../images/p4_faces.tif
+tiffstat ../images/p4_ortho.tif
+tiffread ../images/p4_ortho.tif
+tiffstat ../images/p4_persp.tif
+tiffread ../images/p4_persp.tif
+tiffstat ../images/p4_simple.tif
+tiffread ../images/p4_simple.tif
+tiffstat ../images/p4_test.tif
+tiffread ../images/p4_test.tif
+

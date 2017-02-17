@@ -1,0 +1,12 @@
+tiffstat ../images/play.tif
+tiffread ../images/play.tif
+tiffwrite ../images/playtestimg.tif 50 50 200 200
+tiffstat ../images/play2.tif
+tiffread ../images/play2.tif
+tiffstat ../images/play3.tif
+tiffread ../images/play3.tif
+tiffstat ../images/playpal.tif
+tiffread ../images/playpal.tif
+tiffstat ../images/playrgb.tif
+tiffread ../images/playrgb.tif
+
