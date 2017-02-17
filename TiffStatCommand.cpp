@@ -85,12 +85,11 @@ TiffStatCommand::TiffStatCommand(std::string& file): name("tiffstat"), filename(
 
 
 void TiffStatCommand::execute() {
+    std::cout << toString() << ":" << std::endl;
     std::ifstream imfile;
     imfile.open (filename, std::ios::binary );
     if (imfile.is_open()) {
         try {
-            std::cout << toString() << ":" << std::endl;
-
             bool swap = false;
             bool isBigEndian = false;
 

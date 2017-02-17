@@ -24,7 +24,7 @@ all: main
 
 CLI_OBJECTS=main.o Tokenizer.o MoveCommand.o DrawCommand.o ColorCommand.o ReadCommand.o Command.o CLI.o
 
-TIFF_OBJECTS=Utilities.o TiffStatCommand.o TiffReadCommand.o TiffImageData.o
+TIFF_OBJECTS=Utilities.o TiffStatCommand.o TiffReadCommand.o TiffImageData.o TiffWriteCommand.o
 
 main: $(CLI_OBJECTS) $(TIFF_OBJECTS)
 	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(LDADD) $(LIBS)

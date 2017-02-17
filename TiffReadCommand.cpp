@@ -10,13 +10,11 @@ extern "C" {
 #include <stdio.h>
 }
 
-//#define	checkImageWidth 1024
-//#define	checkImageHeight 1024
-//GLubyte checkImage[checkImageHeight][checkImageWidth][3];
-
 TiffReadCommand::TiffReadCommand(std::string& file, CLI& mainCLI): name("tiffread"), filename(file), cli(mainCLI) {}
 
 void TiffReadCommand::execute() {
+    std::cout << toString() << std::endl;
+
     std::ifstream imfile;
     imfile.open (filename, std::ios::binary );
     if (imfile.is_open()) {
