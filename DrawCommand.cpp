@@ -3,7 +3,7 @@
 
 DrawCommand::DrawCommand(std::vector<double>& p): name("draw"), params(p) {}
 
-void DrawCommand::execute() const {
+void DrawCommand::execute() {
     std::cout << toString() << std::endl;
 }
 

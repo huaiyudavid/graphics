@@ -5,13 +5,14 @@
 
 #include "Command.h"
 #include "Tokenizer.h"
+#include "TiffImageData.h"
 /*
  * CLI acts as the main interpreter of commands, converting strings to Command objects
  */
 class CLI {
 public:
     // Constructor
-    CLI(): tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
+    CLI(): hasImage(false), imageData(), tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
 
     /*
      * method: isCommand
@@ -25,6 +26,9 @@ public:
      * return: nullptr if invalid command
      */
     Command* parseCommand(std::string& line, bool inFile);
+
+    bool hasImage;
+    TiffImageData imageData;
 
 private:
     /*
@@ -44,7 +48,6 @@ private:
     std::string prefix;
 
     size_t totalReads;
-
     const size_t MAX_READS;
 };
 

@@ -27,15 +27,13 @@ extern "C" {
 
 #include "CLI.h"
 #include "Command.h"
-#include "MoveCommand.h"
-
+#include "global.h"
 
 
 /*	Create checkerboard image	*/
 #define	checkImageWidth 1024
 #define	checkImageHeight 1024
 GLubyte checkImage[checkImageHeight][checkImageWidth][3];
-
 static GLint height;
 
 CLI cli;
@@ -217,6 +215,7 @@ main_loop(char line[])
             Command* com = cli.parseCommand(lineStr, false);
             if (com != nullptr) {
                 com->execute();
+                glutPostRedisplay();
             }
             delete com;
         }

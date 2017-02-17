@@ -4,6 +4,9 @@
 #include "Utilities.h"
 
 TiffStatCommand::TiffStatCommand(std::string& file): name("tiffstat"), filename(file) {
+    for (size_t i = 0; i < 33433; i++) {
+        tagnames[i] = "";
+    }
     tagnames[254] = "NewSubfileType";
     tagnames[255] = "SubfileType";
     tagnames[256] = "ImageWidth";
@@ -81,7 +84,7 @@ TiffStatCommand::TiffStatCommand(std::string& file): name("tiffstat"), filename(
 }
 
 
-void TiffStatCommand::execute() const {
+void TiffStatCommand::execute() {
     std::ifstream imfile;
     imfile.open (filename, std::ios::binary );
     if (imfile.is_open()) {
@@ -135,6 +138,10 @@ void TiffStatCommand::execute() const {
                 uint16_t type;
                 uint32_t count;
                 readEndian(imfile, (char *)&tag, 2, swap);
+
+                if (tag > 33432 || tagnames[tag] == "") {
+                    std::cout << "CustomTag (" << std::hex << tag << ") ";
+                }
 
                 std::cout << tagnames[tag] << " (" << std::dec << tag << ") ";
 
@@ -216,7 +223,7 @@ void TiffStatCommand::execute() const {
                         for (uint32_t j = 0; j < count; j++) {
                             readEndian(imfile, (char *)&numer, 4, swap);
                             readEndian(imfile, (char *)&denom, 4, swap);
-                            std::cout << numer << "/" << denom << " ";
+                            std::cout << numer/denom << " ";
                         }
                         std::cout << ">" << std::endl;
                     }

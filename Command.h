@@ -12,7 +12,7 @@ public:
      * method: execute
      * details: performs the job of the command
      */
-    virtual void execute() const;
+    virtual void execute();
 
     /*
      * method: toString

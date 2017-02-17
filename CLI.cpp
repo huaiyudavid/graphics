@@ -8,6 +8,7 @@
 #include "ColorCommand.h"
 #include "ReadCommand.h"
 #include "TiffStatCommand.h"
+#include "TiffReadCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -86,7 +87,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             std::cout << "Error: Please provide a filename in line \"" << line << "\"" << std::endl;
             return nullptr;
         }
-    } else if (name == "tiffstat") {
+    } else if (name == "tiffstat" || name == "tiffread") {
         if (tokens.size() > 1) {
             std::string filename = tokens[1];
             if (tokens.size() > 2) {
@@ -96,7 +97,11 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             if (inFile) {
                 filename = prefix + filename;
             }
-            return new TiffStatCommand(filename);
+            if (name == "tiffstat") {
+                return new TiffStatCommand(filename);
+            } else {
+                return new TiffReadCommand(filename, *this);
+            }
         } else {
             std::cout << "Error: Please provide a filename in line \"" << line << "\"" << std::endl;
             return nullptr;

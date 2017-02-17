@@ -2,7 +2,7 @@
 
 #include "Command.h"
 
-void Command::execute() const {
+void Command::execute(){
     std::cout << "Command execute" << std::endl;
 }
 

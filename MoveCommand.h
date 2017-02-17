@@ -11,7 +11,7 @@
 class MoveCommand : public Command {
 public:
     MoveCommand(std::vector<double>& p);
-    virtual void execute() const;
+    virtual void execute();
     virtual std::string toString() const;
     virtual ~MoveCommand() {};
 

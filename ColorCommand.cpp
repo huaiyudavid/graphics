@@ -3,7 +3,7 @@
 
 ColorCommand::ColorCommand(std::vector<double>& p): name("color"), params(p) {}
 
-void ColorCommand::execute() const {
+void ColorCommand::execute() {
     std::cout << toString() << std::endl;
 }
 

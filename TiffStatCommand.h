@@ -9,7 +9,7 @@
 class TiffStatCommand : public Command {
 public:
     TiffStatCommand(std::string& file);
-    virtual void execute() const;
+    virtual void execute();
     virtual std::string toString() const;
     virtual ~TiffStatCommand() {};
 private:

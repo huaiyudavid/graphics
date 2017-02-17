@@ -11,7 +11,7 @@
 class DrawCommand : public Command {
 public:
     DrawCommand(std::vector<double>& p);
-    virtual void execute() const;
+    virtual void execute();
     virtual std::string toString() const;
     virtual ~DrawCommand() {};
 

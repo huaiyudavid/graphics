@@ -3,7 +3,7 @@
 
 MoveCommand::MoveCommand(std::vector<double>& p): name("move"), params(p) {}
 
-void MoveCommand::execute() const {
+void MoveCommand::execute() {
     std::cout << toString() << std::endl;
 }
 

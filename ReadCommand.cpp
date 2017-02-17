@@ -5,7 +5,7 @@
 
 ReadCommand::ReadCommand(std::string& file, CLI& mainCLI): name("read"), filename(file), cli(mainCLI) {}
 
-void ReadCommand::execute() const {
+void ReadCommand::execute() {
     std::string line;
     std::ifstream file(filename);
     if (file.is_open())

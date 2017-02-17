@@ -11,7 +11,7 @@
 class ReadCommand : public Command {
 public:
     ReadCommand(std::string& file, CLI& mainCLI);
-    virtual void execute() const;
+    virtual void execute();
     virtual std::string toString() const;
     virtual ~ReadCommand() {}
 
