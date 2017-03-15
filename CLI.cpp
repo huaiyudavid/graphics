@@ -285,9 +285,9 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             if (tokens.size() > 2) {
                 if (filterType == "gaussian" || filterType == "lanczos" || filterType == "tent" || filterType == "box") {
                     std::string token = tokens[2];
-                    int width = 2;
+                    double width = 2;
                     try {
-                        width = std::stoi(token);
+                        width = std::stod(token);
                     } catch (const std::invalid_argument &e) {
                         std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
                         return nullptr;
@@ -297,14 +297,14 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                         return nullptr;
                     }
                     if (width <= 0) {
-                        std::cout << "Error: Filter width must be a natural number" << std::endl;
+                        std::cout << "Error: Filter width must be a positive number" << std::endl;
                         return nullptr;
                     }
                     if (tokens.size() > 3) {
                         std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
                         std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
                     }
-                    filter.setWidth((size_t)width);
+                    filter.setWidth(width);
                     std::cout << "Filter width set to " << width << std::endl;
                 } else {
                     std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;

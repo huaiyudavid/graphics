@@ -6,7 +6,7 @@
 
 Filter::Filter(): type("lanczos"), border("zero"), width(2) {}
 
-size_t Filter::getWidth() {
+double Filter::getWidth() {
     return width;
 }
 
@@ -58,7 +58,7 @@ double Filter::getValue(double x) {
     return 0;
 }
 
-void Filter::setWidth(size_t w) {
+void Filter::setWidth(double w) {
     width = w;
 }
 
