@@ -222,7 +222,11 @@ void TiffStatCommand::execute() {
                         for (uint32_t j = 0; j < count; j++) {
                             readEndian(imfile, (char *)&numer, 4, swap);
                             readEndian(imfile, (char *)&denom, 4, swap);
-                            std::cout << numer/denom << " ";
+                            if (denom == 0) {
+                                std::cout << "NaN" << " ";
+                            } else {
+                                std::cout << numer/denom << " ";
+                            }
                         }
                         std::cout << ">" << std::endl;
                     }

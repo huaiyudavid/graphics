@@ -10,13 +10,15 @@
 #include "TiffStatCommand.h"
 #include "TiffReadCommand.h"
 #include "TiffWriteCommand.h"
+#include "ResizeCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
 }
 
 Command* CLI::parseCommand(std::string& line, bool inFile) {
-    std::string commands[] = {"move", "draw", "color", "read", "tiffread", "tiffstat", "tiffwrite"};
+    std::string commands[] = {"move", "draw", "color", "read",
+                              "tiffread", "tiffstat", "tiffwrite", "resize", "zoom", "border", "select"};
     std::vector<std::string> tokens = tokenizer.tokenize(line, ", \t");
     std::string name = tokens[0];
     tolower(name);
@@ -177,6 +179,142 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             return new TiffWriteCommand(filename, params, *this);
         } else {
             std::cout << "Error: Not enough parameters for tiffwrite, please provide [filename, x0, y0, xc, yc]" << std::endl;
+            return nullptr;
+        }
+    } else if (name == "resize") {
+        std::vector<double> params;
+        for (size_t i = 1; i < 3; ++i) {
+            double num = 1;
+            if (i < tokens.size()) {
+                std::string token = tokens[i];
+                if (token != "") {
+                    try {
+                        num = std::stod(token);
+                    } catch (const std::invalid_argument &e) {
+                        std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
+                        return nullptr;
+                    } catch (const std::out_of_range &e) {
+                        std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                  << std::endl;
+                        return nullptr;
+                    }
+                }
+            }
+            params.push_back(num);
+        }
+        if (tokens.size() > 3) {
+            std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+            std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+        }
+
+        return new ResizeCommand(params, *this);
+    } else if (name == "zoom") {
+        if (tokens.size() > 1) {
+            std::string token = tokens[1];
+            double num = 1;
+            try {
+                num = std::stod(token);
+            } catch (const std::invalid_argument &e) {
+                std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
+                return nullptr;
+            } catch (const std::out_of_range &e) {
+                std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                          << std::endl;
+                return nullptr;
+            }
+            if (tokens.size() > 2) {
+                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            return new ResizeCommand(num, *this);
+        } else {
+            std::cout << "Error: Please provide a scale in line \"" << line << "\"" << std::endl;
+            return nullptr;
+        }
+    } else if (name == "border") {
+        if (tokens.size() > 1) {
+            std::string borderType = tokens[1];
+            tolower(borderType);
+            if (tokens.size() > 2) {
+                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+            std::string borderTypes[] = {"zero", "freeze", "circular"};
+            bool invalidBorder = true;
+            for (const std::string& type : borderTypes) {
+                if (borderType == type) {
+                    invalidBorder = false;
+                    break;
+                }
+            }
+            if (invalidBorder) {
+                std::cout << "Error: Please give a valid border type in line \"" << line << "\"" << std::endl;
+                std::cout << "Valid border types:" << std::endl;
+                for (const std::string& type : borderTypes) {
+                    std::cout << type << std::endl;
+                }
+                return nullptr;
+            }
+            filter.setBorder(borderType);
+            std::cout << "Border type set to " << borderType << std::endl;
+        } else {
+            std::cout << "Error: Please provide a border type in line \"" << line << "\"" << std::endl;
+            return nullptr;
+        }
+    } else if (name == "select") {
+        if (tokens.size() > 1) {
+            std::string filterType = tokens[1];
+            tolower(filterType);
+            std::string filterTypes[] = {"lanczos", "gaussian", "mitchell", "hamming", "bsplcubic", "catmullrom", "tent", "box"};
+            bool invalidFilter = true;
+            for (const std::string& type : filterTypes) {
+                if (filterType == type) {
+                    invalidFilter = false;
+                    break;
+                }
+            }
+            if (invalidFilter) {
+                std::cout << "Error: Please give a valid filter type in line \"" << line << "\"" << std::endl;
+                std::cout << "Valid filter types:" << std::endl;
+                for (const std::string& type : filterTypes) {
+                    std::cout << type << std::endl;
+                }
+                return nullptr;
+            }
+            if (tokens.size() > 2) {
+                if (filterType == "gaussian" || filterType == "lanczos" || filterType == "tent" || filterType == "box") {
+                    std::string token = tokens[2];
+                    int width = 2;
+                    try {
+                        width = std::stoi(token);
+                    } catch (const std::invalid_argument &e) {
+                        std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
+                        return nullptr;
+                    } catch (const std::out_of_range &e) {
+                        std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                  << std::endl;
+                        return nullptr;
+                    }
+                    if (width <= 0) {
+                        std::cout << "Error: Filter width must be a natural number" << std::endl;
+                        return nullptr;
+                    }
+                    if (tokens.size() > 3) {
+                        std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                        std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+                    }
+                    filter.setWidth((size_t)width);
+                    std::cout << "Filter width set to " << width << std::endl;
+                } else {
+                    std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                    std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+                }
+            }
+            filter.setType(filterType);
+            std::cout << "Filter type set to " << filterType << std::endl;
+        } else {
+            std::cout << "Error: Please provide a filter type in line \"" << line << "\"" << std::endl;
             return nullptr;
         }
     }

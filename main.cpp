@@ -72,7 +72,7 @@ init(void)
 
 /*
  * Function name: display
- * Description:   The glut display callback, operations to render and 
+ * Description:   The glut display callback, operations to render and
  *                re-render are here.
  * Arguments:	  none
  * Globals:       none
@@ -90,7 +90,7 @@ display(void)
 
 /*
  * Function name: reshape
- * Description:   glut reshape callback, what actions to take when the 
+ * Description:   glut reshape callback, what actions to take when the
  *                window is reshaped.
  * Arguments:	  w - the new width
  *                h - the new height
@@ -305,8 +305,8 @@ main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(250, 250);
-    glutInitWindowPosition(100, 100);
+    glutInitWindowSize(512, 512);
+    glutInitWindowPosition(1000, 100);
     glutCreateWindow(argv[0]);
     init();
     glutDisplayFunc(display);
