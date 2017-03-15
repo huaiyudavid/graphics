@@ -8,7 +8,8 @@ graphics project
 
 # Extra Credit
 # Dealing with Borders
-
+Change the border handling with ```border [bordertype]```, where `[bordertype]` is one of `zero`, `freeze`, or `circular`.
+* `zero` seems to cause a 
 
 # Different Filters
 
