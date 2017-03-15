@@ -286,7 +286,7 @@ void ResizeCommand::findPixelsInRange(double targetPoint, double factor, double 
     if (magnify) {
         double centerSource = targetPoint/factor;
         double lowerBoundSource = centerSource - cli.filter.getWidth();
-        for (int pixel = (int)ceil(lowerBoundSource); pixel < lowerBoundSource + 2*cli.filter.getWidth(); ++pixel) {
+        for (int pixel = (int)ceil(lowerBoundSource); pixel <= lowerBoundSource + 2*cli.filter.getWidth(); ++pixel) {
             pixels.emplace_back(pixel);
         }
         for (auto pixel : pixels) {
@@ -294,7 +294,7 @@ void ResizeCommand::findPixelsInRange(double targetPoint, double factor, double 
         }
     } else {
         double lowerBoundSource = (targetPoint - cli.filter.getWidth()) / factor;
-        for (int pixel = (int)ceil(lowerBoundSource); pixel < lowerBoundSource + 2*cli.filter.getWidth()/factor; ++pixel) {
+        for (int pixel = (int)ceil(lowerBoundSource); pixel <= lowerBoundSource + 2*cli.filter.getWidth()/factor; ++pixel) {
             pixels.emplace_back(pixel);
         }
         for (auto pixel : pixels) {
