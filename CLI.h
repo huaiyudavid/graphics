@@ -7,13 +7,18 @@
 #include "Tokenizer.h"
 #include "TiffImageData.h"
 #include "Filter.h"
+#include "Matrix44.h"
+
+#include <vector>
 /*
  * CLI acts as the main interpreter of commands, converting strings to Command objects
  */
 class CLI {
 public:
     // Constructor
-    CLI(): hasImage(false), imageData(), filter(), tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
+    CLI(): hasImage(false), imageData(), filter(), tokenizer(), prefix(""), totalReads(0), MAX_READS(1000),
+            perspFlag(false), orthFlag(false), near(0), far(0), perspMatrix(), orthMatrix(), currentMatrix(),
+            stack() {}
 
     /*
      * method: isCommand
@@ -31,6 +36,13 @@ public:
     bool hasImage;
     TiffImageData imageData;
     Filter filter;
+
+    bool perspFlag, orthFlag;
+    double near, far;
+    Matrix44 perspMatrix, orthMatrix;
+    Matrix44 currentMatrix;
+    std::vector<Matrix44> stack;
+
 
 private:
     /*
