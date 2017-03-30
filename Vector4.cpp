@@ -24,6 +24,19 @@ const double Vector4::operator[](int index) const {
     return vec[index];
 }
 
+Vector4& Vector4::operator*=(double scalar) {
+    for (int i = 0; i < 4; i++) {
+        vec[i] *= scalar;
+    }
+    return *this;
+}
+Vector4& Vector4::operator+=(double scalar) {
+    for (int i = 0; i < 4; i++) {
+        vec[i] += scalar;
+    }
+    return *this;
+}
+
 std::string Vector4::toString() const {
     std::string result = "[ ";
     for (int i = 0; i < 4; i++) {

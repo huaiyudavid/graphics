@@ -38,6 +38,8 @@ void ResizeCommand::execute() {
     if (yscaleNeg) {
         invertY();
     }
+
+    glutPostRedisplay();
 }
 
 std::string ResizeCommand::toString() const {

@@ -45,7 +45,7 @@ Matrix44& Matrix44::operator+=(const Matrix44& other) {
 }
 
 Matrix44& Matrix44::operator*=(const Matrix44& other) {
-    Matrix44 answer = *this + other;
+    Matrix44 answer = *this * other;
     std::swap(matrix, answer.matrix);
     return *this;
 }

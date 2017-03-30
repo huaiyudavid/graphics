@@ -13,6 +13,12 @@ void VertexCommand::execute() {
     std:: cout << "command executed" << std::endl;
     float x0, y0, z0, x1, y1, z1;
 
+    GLint viewport[4];
+
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    int width = abs(viewport[2]-viewport[0]);
+    int height = abs(viewport[3]-viewport[1]);
+
     /* set up 4x1 matrix of the vertex */
     Vector4 printvec(x, y, z, 1);
 
@@ -52,8 +58,16 @@ void VertexCommand::execute() {
                 std::cout << "vertex1: " << vertex1.toString() << std::endl;
                 std::cout << "vertex2: " << vertex2.toString() << std::endl;
 
+                vertex1 += 1; vertex1[0] *= width/2.0; vertex1[1] *= height/2.0;
+                vertex2 += 1; vertex2[0] *= width/2.0; vertex2[1] *= height/2.0;
+
+                std::cout << "vertex1: " << vertex1.toString() << std::endl;
+                std::cout << "vertex2: " << vertex2.toString() << std::endl;
+
                 draw_line((float)vertex1[0], (float)vertex1[1],
                           (float)vertex2[0], (float)vertex2[1]);
+
+                //draw_line(0, 0, 200, 200);
 
                 cli.printflag=0;
             }
@@ -66,6 +80,9 @@ void VertexCommand::execute() {
 
                 Vector4 vertex1 = cli.perspMatrix * permat1;
                 Vector4 vertex2 = cli.perspMatrix * permat2;
+
+                vertex1 += 1; vertex1[0] *= width/2.0; vertex1[1] *= height/2.0;
+                vertex2 += 1; vertex2[0] *= width/2.0; vertex2[1] *= height/2.0;
 
                 //BOBBY
                 printf(" Vertex 1: %f %f\n Vertex 2: %f %f\n", vertex1[0], vertex1[1], vertex2[0], vertex2[1]);

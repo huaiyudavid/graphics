@@ -12,8 +12,12 @@ void OrthoCommand::execute() {
     } else {
         double r1[] = {2/(r-l), 0, 0, -(r+l)/(r-l)};
         double r2[] = {0, 2/(t-b), 0, -(t+b)/(t-b)};
-        double r3[] = {0, 0, 1/(f-n), -n/(f-n)};
+        double r3[] = {0, 0, 2/(n-f), -(n+f)/(n-f)};
         double r4[] = {0, 0, 0, 1};
+//        double r1[] = {2/(r-l), 0, 0, -(r+l)/(r-l)};
+//        double r2[] = {0, 2/(t-b), 0, -(t+b)/(t-b)};
+//        double r3[] = {0, 0, 1/(f-n), -(n)/(f-n)};
+//        double r4[] = {0, 0, 0, 1};
         Matrix44 orthoMatrix(r1, r2, r3, r4);
         cli.orthMatrix = orthoMatrix;
         cli.orthFlag = true;
@@ -21,6 +25,8 @@ void OrthoCommand::execute() {
         cli.near = n;
         cli.far = f;
     }
+    std::cout << "ortho: " << std::endl;
+    std::cout << cli.orthMatrix.toString() << std::endl;
 }
 
 std::string OrthoCommand::toString() const {

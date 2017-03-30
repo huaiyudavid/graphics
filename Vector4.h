@@ -14,6 +14,9 @@ public:
     double& operator[](int index);
     const double operator[](int index) const;
 
+    Vector4& operator*=(double scalar);
+    Vector4& operator+=(double scalar);
+
     std::string toString() const;
 
 private:

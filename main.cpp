@@ -215,8 +215,10 @@ main_loop(char line[])
             Command* com = cli.parseCommand(lineStr, false);
             if (com != nullptr) {
                 com->execute();
+                std::cout << "current matrix" << std::endl;
                 std::cout << cli.currentMatrix.toString() << std::endl;
-                glutPostRedisplay();
+                glFlush();
+                //glutPostRedisplay();
             }
             delete com;
         }

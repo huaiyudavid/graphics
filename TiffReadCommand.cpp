@@ -479,6 +479,8 @@ void TiffReadCommand::execute() {
 
             //Image should now be successfully read
             cli.hasImage = true;
+
+            glutPostRedisplay();
         } catch (std::exception ex) {
             imfile.close();
             std::cout << "Error: unable to read file as TIFF format" << std::endl;

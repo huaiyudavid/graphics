@@ -39,8 +39,6 @@ Entry:
 
 void draw_line(float x0, float y0, float x1, float y1)
 {
-
-    std::cout << "drawing line" << std::endl;
     GLint viewport[4];
     int i;
     float x,y;
@@ -56,8 +54,6 @@ void draw_line(float x0, float y0, float x1, float y1)
     width = abs(viewport[2]-viewport[0]);
     height = abs(viewport[3]-viewport[1]);
 
-    std::cout << width << " " << height << std::endl;
-
     set_clip_window (0.0, 0.0, width - 0.51, height - 0.51);
 
     /* clip the line in 2D */
@@ -66,8 +62,6 @@ void draw_line(float x0, float y0, float x1, float y1)
     /* return if line is entirely outside the clip window */
     if (result == 0)
         return;
-
-    std::cout << "made it here" << std::endl;
 
     /* incremental line drawing */
 
@@ -84,7 +78,6 @@ void draw_line(float x0, float y0, float x1, float y1)
     /* special case to avoid dividing by zero */
 
     if (length == 0) {
-        std::cout << "length is 0" << std::endl;
         glColor3f( 1.0, 1.0, 1.0 );
         glBegin(GL_POINTS);
         glVertex2i((int) floor(x0+0.5), (int) floor(y0+0.5));
@@ -102,7 +95,6 @@ void draw_line(float x0, float y0, float x1, float y1)
     /* write "length" number of pixels along the line */
 
     for (i = 0; i <= length; i++) {
-        std::cout << "in for loop" << std::endl;
         glColor3f( 1.0, 1.0, 1.0 );
         glBegin(GL_POINTS);
         glVertex2i((int) floor(x+0.5), (int) floor(y+0.5));
@@ -113,7 +105,6 @@ void draw_line(float x0, float y0, float x1, float y1)
         y += yinc;
     }
     glFlush();
-    std::cout << "flushed" << std::endl;
 }
 
 
