@@ -19,6 +19,8 @@
 #include "OrthoCommand.h"
 #include "PerspectiveCommand.h"
 #include "LookatCommand.h"
+#include "VertexCommand.h"
+#include "ResetCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -332,9 +334,9 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
         } else if (name == "pop") {
             return new PopCommand(*this);
         } else if (name == "reset") {
-
+            return new ResetCommand(*this);
         }
-    } else if (name == "translate" || name == "scale") {
+    } else if (name == "translate" || name == "scale" || name == "vertex") {
         if (tokens.size() > 3) {
             if (tokens.size() > 4) {
                 std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
@@ -367,6 +369,8 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                 return new TranslateCommand(params[0], params[1], params[2], *this);
             } else if (name == "scale") {
                 return new ScaleCommand(params[0], params[1], params[2], *this);
+            } else {
+                return new VertexCommand((float)params[0], (float)params[1], (float)params[2], *this);
             }
         } else {
             std::cout << "Error: Not enough parameters, please provide [x, y, z]" << std::endl;

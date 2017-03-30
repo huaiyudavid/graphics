@@ -1,7 +1,3 @@
-//
-// Created by david on 3/29/17.
-//
-
 #ifndef GRAPHICS_LOOKATCOMMAND_H
 #define GRAPHICS_LOOKATCOMMAND_H
 

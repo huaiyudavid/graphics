@@ -16,7 +16,20 @@ Vector4& Vector4::operator=(const Vector4& other) {
     return *this;
 }
 
+double& Vector4::operator[](int index) {
+    return vec[index];
+}
+
 const double Vector4::operator[](int index) const {
     return vec[index];
+}
+
+std::string Vector4::toString() const {
+    std::string result = "[ ";
+    for (int i = 0; i < 4; i++) {
+        result += std::to_string(vec[i]) + ' ';
+    }
+    result += ']';
+    return result;
 }
 
