@@ -3,6 +3,8 @@
 
 #include "Vector4.h"
 
+#include <string>
+
 class Matrix44 {
 public:
     Matrix44();
@@ -22,6 +24,9 @@ public:
     Matrix44 operator-(const Matrix44& other) const;
 
     Vector4 operator*(const Vector4& point) const;
+
+    std::string toString() const;
+
 private:
     double matrix[4][4];
 };

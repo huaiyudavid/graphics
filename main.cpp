@@ -215,6 +215,7 @@ main_loop(char line[])
             Command* com = cli.parseCommand(lineStr, false);
             if (com != nullptr) {
                 com->execute();
+                std::cout << cli.currentMatrix.toString() << std::endl;
                 glutPostRedisplay();
             }
             delete com;

@@ -16,9 +16,10 @@
 class CLI {
 public:
     // Constructor
-    CLI(): hasImage(false), imageData(), filter(), tokenizer(), prefix(""), totalReads(0), MAX_READS(1000),
+    CLI(): hasImage(false), imageData(), filter(),
             perspFlag(false), orthFlag(false), near(0), far(0), perspMatrix(), orthMatrix(), currentMatrix(),
-            stack() {}
+            stack(),
+            tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
 
     /*
      * method: isCommand

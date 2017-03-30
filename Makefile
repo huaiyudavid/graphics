@@ -26,8 +26,10 @@ CLI_OBJECTS=main.o Tokenizer.o MoveCommand.o DrawCommand.o ColorCommand.o ReadCo
 
 TIFF_OBJECTS=Utilities.o TiffStatCommand.o TiffReadCommand.o TiffImageData.o TiffWriteCommand.o ResizeCommand.o Filter.o
 
-main: $(CLI_OBJECTS) $(TIFF_OBJECTS)
-	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(LDADD) $(LIBS)
+3D_OBJECTS=Matrix44.o Vector4.o Vector3.o PushCommand.o PopCommand.o TranslateCommand.o ScaleCommand.o RotateCommand.o OrthoCommand.o PerspectiveCommand.o
+
+main: $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS)
+	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS) $(LDADD) $(LIBS)
 
 clean:
 	-rm -f *.o $(PROGRAMS)
