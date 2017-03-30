@@ -10,7 +10,6 @@ VertexCommand::VertexCommand(float xIn, float yIn, float zIn, CLI& mainCLI):
         name("vertex"), x(xIn), y(yIn), z(zIn), cli(mainCLI) {}
 
 void VertexCommand::execute() {
-    std:: cout << "command executed" << std::endl;
     float x0, y0, z0, x1, y1, z1;
 
     GLint viewport[4];
@@ -29,7 +28,6 @@ void VertexCommand::execute() {
 
     if(cli.printflag==1) { /* if the first vertex, save the points */
         cli.savemat = tmp;
-        std::cout << cli.savemat.toString() << std::endl;
     }
     if(cli.printflag==2) { /* if the second vertex, test clipping */
         x1=(float)tmp[0];
@@ -46,23 +44,14 @@ void VertexCommand::execute() {
             Vector4 pvert1(x0, y0, z0, 1);
             Vector4 pvert2(x1, y1, z1, 1);
 
-            std::cout << "pvert1: " << pvert1.toString() << std::endl;
-            std::cout << "pvert2: " << pvert2.toString() << std::endl;
-
             if(cli.orthFlag && !cli.perspFlag) {  /* if not a perpective projection, use ortho */
 
                 /* calculate 2d coordinates */
                 Vector4 vertex1 = cli.orthMatrix * pvert1;
                 Vector4 vertex2 = cli.orthMatrix * pvert2;
 
-                std::cout << "vertex1: " << vertex1.toString() << std::endl;
-                std::cout << "vertex2: " << vertex2.toString() << std::endl;
-
                 vertex1 += 1; vertex1[0] *= width/2.0; vertex1[1] *= height/2.0;
                 vertex2 += 1; vertex2[0] *= width/2.0; vertex2[1] *= height/2.0;
-
-                std::cout << "vertex1: " << vertex1.toString() << std::endl;
-                std::cout << "vertex2: " << vertex2.toString() << std::endl;
 
                 draw_line((float)vertex1[0], (float)vertex1[1],
                           (float)vertex2[0], (float)vertex2[1]);
@@ -85,7 +74,7 @@ void VertexCommand::execute() {
                 vertex2 += 1; vertex2[0] *= width/2.0; vertex2[1] *= height/2.0;
 
                 //BOBBY
-                printf(" Vertex 1: %f %f\n Vertex 2: %f %f\n", vertex1[0], vertex1[1], vertex2[0], vertex2[1]);
+                // printf(" Vertex 1: %f %f\n Vertex 2: %f %f\n", vertex1[0], vertex1[1], vertex2[0], vertex2[1]);
 
                 draw_line((float)vertex1[0],
                           (float)vertex1[1],
