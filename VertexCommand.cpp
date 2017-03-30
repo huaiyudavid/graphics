@@ -54,7 +54,7 @@ void VertexCommand::execute() {
                 vertex2 += 1; vertex2[0] *= width/2.0; vertex2[1] *= height/2.0;
 
                 draw_line((float)vertex1[0], (float)vertex1[1],
-                          (float)vertex2[0], (float)vertex2[1]);
+                          (float)vertex2[0], (float)vertex2[1], cli);
 
                 //draw_line(0, 0, 200, 200);
 
@@ -79,7 +79,7 @@ void VertexCommand::execute() {
                 draw_line((float)vertex1[0],
                           (float)vertex1[1],
                           (float)vertex2[0],
-                          (float)vertex2[1]);
+                          (float)vertex2[1], cli);
 
 
                 cli.printflag = 0; /* set counter=0 to look for another set of vertices */

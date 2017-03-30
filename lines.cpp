@@ -6,6 +6,8 @@ extern "C" {
 #include <stdlib.h>
 }
 
+#include "global.h"
+#include "CLI.h"
 #include <iostream>
 
 /* the clipping window */
@@ -37,7 +39,7 @@ Entry:
   x1,y1 - second line endpoint
 ******************************************************************************/
 
-void draw_line(float x0, float y0, float x1, float y1)
+void draw_line(float x0, float y0, float x1, float y1, CLI& cli)
 {
     GLint viewport[4];
     int i;
@@ -83,6 +85,10 @@ void draw_line(float x0, float y0, float x1, float y1)
         glVertex2i((int) floor(x0+0.5), (int) floor(y0+0.5));
         glEnd();
 
+        checkImage[(int) floor(y0+0.5)][(int) floor(x0+0.5)][0] = (GLubyte) 255;
+        checkImage[(int) floor(y0+0.5)][(int) floor(x0+0.5)][1] = (GLubyte) 255;
+        checkImage[(int) floor(y0+0.5)][(int) floor(x0+0.5)][2] = (GLubyte) 255;
+
         return;
     }
 
@@ -100,10 +106,29 @@ void draw_line(float x0, float y0, float x1, float y1)
         glVertex2i((int) floor(x+0.5), (int) floor(y+0.5));
         glEnd();
 
+        checkImage[(int) floor(y+0.5)][(int) floor(x+0.5)][0] = (GLubyte) 255;
+        checkImage[(int) floor(y+0.5)][(int) floor(x+0.5)][1] = (GLubyte) 255;
+        checkImage[(int) floor(y+0.5)][(int) floor(x+0.5)][2] = (GLubyte) 255;
 
         x += xinc;
         y += yinc;
     }
+
+    cli.imageData.isGrayscale = false;
+    cli.imageData.imageWidth = (uint32_t)width;
+    cli.imageData.imageLength = (uint32_t)height;
+    cli.imageData.bitsPerSample[0] = 8;
+    cli.imageData.bitsPerSample[1] = 8;
+    cli.imageData.bitsPerSample[2] = 8;
+    cli.imageData.compression = 1;
+    cli.imageData.photometric = 2;
+    cli.imageData.samplesPerPixel = 3;
+    cli.imageData.xResNumer = 1;
+    cli.imageData.xResDenom = 1;
+    cli.imageData.resolutionUnit = 1;
+
+    cli.hasImage = true;
+
     glFlush();
 }
 

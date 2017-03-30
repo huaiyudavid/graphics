@@ -12,6 +12,8 @@ void ResetCommand::execute() {
 
     cli.stack.clear();
     cli.currentMatrix = Matrix44();
+
+    makeBlackImage();
 }
 
 std::string ResetCommand::toString() const {
