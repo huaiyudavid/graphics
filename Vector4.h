@@ -5,9 +5,9 @@ class Vector4 {
 public:
     Vector4();
     Vector4(double a, double b, double c, double d);
-    Vector4(Vector4& other);
+    Vector4(const Vector4& other);
 
-    Vector4& operator=(Vector4& other);
+    Vector4& operator=(const Vector4& other);
 
     const double operator[](int index) const;
 

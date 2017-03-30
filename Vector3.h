@@ -6,14 +6,14 @@ class Vector3 {
 public:
     Vector3();
     Vector3(double a, double b, double c);
-    Vector3(Vector3& other);
+    Vector3(const Vector3& other);
 
-    Vector3& operator=(Vector3& other);
+    Vector3& operator=(const Vector3& other);
 
     const double operator[](int index) const;
     double& operator[](int index);
 
-    Vector3 cross(Vector3& other) const;
+    Vector3 cross(const Vector3& other) const;
     Vector3 unit() const;
 
 private:

@@ -18,6 +18,7 @@
 #include "RotateCommand.h"
 #include "OrthoCommand.h"
 #include "PerspectiveCommand.h"
+#include "LookatCommand.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -26,7 +27,7 @@ bool CLI::isCommand(std::string& line) {
 Command* CLI::parseCommand(std::string& line, bool inFile) {
     std::string commands[] = {"move", "draw", "color", "read",
                               "tiffread", "tiffstat", "tiffwrite", "resize", "zoom", "border", "select",
-                              "push", "pop", "translate", "scale", "rotate", "ortho", "perspective"};
+                              "push", "pop", "translate", "scale", "rotate", "ortho", "perspective", "lookat", "vertex", "reset"};
     std::vector<std::string> tokens = tokenizer.tokenize(line, ", \t");
     std::string name = tokens[0];
     tolower(name);
@@ -469,6 +470,42 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             }
 
             return new PerspectiveCommand(params[0], params[1], params[2], params[3], *this);
+        } else {
+            std::cout << "Error: Not enough parameters, please provide [f, a, n, f]" << std::endl;
+            return nullptr;
+        }
+    } else if (name == "lookat") {
+        if (tokens.size() > 9) {
+            if (tokens.size() > 10) {
+                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 10; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            return new LookatCommand(params[0], params[1], params[2],
+                                          params[3], params[4], params[5],
+                                          params[6], params[7], params[8], *this);
         } else {
             std::cout << "Error: Not enough parameters, please provide [f, a, n, f]" << std::endl;
             return nullptr;

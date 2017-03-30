@@ -2,7 +2,7 @@
 
 perspective 50 1 1 1000
 push
-lookat 50 50 200  50 50 0  0 1 0
+lookat 50 50 200 50 50 0 0 1 0
 
 # letters X, Y and Z
 

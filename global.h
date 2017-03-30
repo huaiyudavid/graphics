@@ -5,6 +5,8 @@ extern "C" {
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 }
 
 /*	Create checkerboard image	*/
@@ -13,5 +15,8 @@ extern "C" {
 extern GLubyte checkImage[checkImageHeight][checkImageWidth][3];
 
 extern void makeCheckImage();
+
+extern void draw_line(float, float, float, float);
+extern int near_far_clip(float, float, float *, float *, float *, float *, float *, float *);
 
 #endif // GLOBAL_H

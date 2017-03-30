@@ -1,6 +1,6 @@
 ortho -100 100 -100 100 -1000 1000
 
-lookat 0 0 150  0 0 0  0 1 0
+lookat 0 0 150 0 0 0 0 1 0
 
 # x, y and z axes
 
