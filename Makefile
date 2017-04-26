@@ -28,8 +28,10 @@ TIFF_OBJECTS=Utilities.o TiffStatCommand.o TiffReadCommand.o TiffImageData.o Tif
 
 3D_OBJECTS=Matrix44.o Vector4.o Vector3.o lines.o PushCommand.o PopCommand.o TranslateCommand.o ScaleCommand.o RotateCommand.o OrthoCommand.o PerspectiveCommand.o LookatCommand.o VertexCommand.o ResetCommand.o
 
-main: $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS)
-	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS) $(LDADD) $(LIBS)
+RAY_TRACER=Camera.o ClearCommand.o Light.o OrthoCamera.o PerspCamera.o Ray.o ScreenCommand.o Shape.o Sphere.o TraceCommand.o Triangle.o
+
+main: $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS) $(RAY_TRACER)
+	$(LINK) $(CLI_OBJECTS) $(TIFF_OBJECTS) $(3D_OBJECTS) $(RAY_TRACER) $(LDADD) $(LIBS)
 
 clean:
 	-rm -f *.o $(PROGRAMS)

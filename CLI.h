@@ -9,6 +9,9 @@
 #include "Filter.h"
 #include "Matrix44.h"
 #include "Vector4.h"
+#include "Camera.h"
+#include "Light.h"
+#include "Shape.h"
 
 #include <vector>
 /*
@@ -20,6 +23,7 @@ public:
     CLI(): hasImage(false), imageData(), filter(),
             perspFlag(false), orthFlag(false), near(0), far(0), perspMatrix(), orthMatrix(), currentMatrix(),
             stack(), printflag(0), savemat(),
+            width(512), height(512), cam(nullptr), background(0, 0, 0), lights(), shapes(),
             tokenizer(), prefix(""), totalReads(0), MAX_READS(1000) {}
 
     /*
@@ -35,6 +39,8 @@ public:
      */
     Command* parseCommand(std::string& line, bool inFile);
 
+    ~CLI();
+
     bool hasImage;
     TiffImageData imageData;
     Filter filter;
@@ -46,6 +52,12 @@ public:
     std::vector<Matrix44> stack;
     int printflag;
     Vector4 savemat;
+
+    double width, height;
+    Camera* cam;
+    Vector3 background;
+    std::vector<Light> lights;
+    std::vector<Shape*> shapes;
 
 
 private:

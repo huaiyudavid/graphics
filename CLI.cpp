@@ -21,6 +21,15 @@
 #include "LookatCommand.h"
 #include "VertexCommand.h"
 #include "ResetCommand.h"
+#include "ScreenCommand.h"
+#include "ClearCommand.h"
+#include "TraceCommand.h"
+#include "OrthoCamera.h"
+#include "PerspCamera.h"
+#include "Sphere.h"
+#include "Triangle.h"
+#include "Box.h"
+#include "Light.h"
 
 bool CLI::isCommand(std::string& line) {
     return line.length() > 0 && line[0] != '#';
@@ -29,7 +38,8 @@ bool CLI::isCommand(std::string& line) {
 Command* CLI::parseCommand(std::string& line, bool inFile) {
     std::string commands[] = {"move", "draw", "color", "read",
                               "tiffread", "tiffstat", "tiffwrite", "resize", "zoom", "border", "select",
-                              "push", "pop", "translate", "scale", "rotate", "ortho", "perspective", "lookat", "vertex", "reset"};
+                              "push", "pop", "translate", "scale", "rotate", "ortho", "perspective", "lookat", "vertex", "reset",
+                              "screen", "orthocamera", "camera", "background", "sphere", "triangle", "box", "ilight", "clear", "trace"};
     std::vector<std::string> tokens = tokenizer.tokenize(line, ", \t");
     std::string name = tokens[0];
     tolower(name);
@@ -66,7 +76,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             params.push_back(num);
         }
         if (tokens.size() > 4) {
-            std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+            std::cout << "1Warning: too many parameters, parameters were truncated" << std::endl;
             std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
         }
 
@@ -87,7 +97,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
         if (tokens.size() > 1) {
             std::string filename = tokens[1];
             if (tokens.size() > 2) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "2Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
             if (inFile) {
@@ -105,7 +115,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
         if (tokens.size() > 1) {
             std::string filename = tokens[1];
             if (tokens.size() > 2) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "3Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
             if (inFile) {
@@ -127,7 +137,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                 filename = prefix + filename;
             }
             if (tokens.size() > 6) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "4Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -214,7 +224,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             params.push_back(num);
         }
         if (tokens.size() > 3) {
-            std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+            std::cout << "5Warning: too many parameters, parameters were truncated" << std::endl;
             std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
         }
 
@@ -234,7 +244,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                 return nullptr;
             }
             if (tokens.size() > 2) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "6Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -248,7 +258,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             std::string borderType = tokens[1];
             tolower(borderType);
             if (tokens.size() > 2) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "7Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
             std::string borderTypes[] = {"zero", "freeze", "circular"};
@@ -312,13 +322,13 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                         return nullptr;
                     }
                     if (tokens.size() > 3) {
-                        std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                        std::cout << "8Warning: too many parameters, parameters were truncated" << std::endl;
                         std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
                     }
                     filter.setWidth(width);
                     std::cout << "Filter width set to " << width << std::endl;
                 } else {
-                    std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                    std::cout << "9Warning: too many parameters, parameters were truncated" << std::endl;
                     std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
                 }
             }
@@ -339,7 +349,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
     } else if (name == "translate" || name == "scale" || name == "vertex") {
         if (tokens.size() > 3) {
             if (tokens.size() > 4) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "10Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -379,7 +389,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
     } else if (name == "rotate") {
         if (tokens.size() > 4) {
             if (tokens.size() > 5) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "11Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -413,7 +423,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
     } else if (name == "ortho") {
         if (tokens.size() > 6) {
             if (tokens.size() > 7) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "12Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -447,7 +457,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
     } else if (name == "perspective") {
         if (tokens.size() > 4) {
             if (tokens.size() > 5) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "13Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -481,7 +491,7 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
     } else if (name == "lookat") {
         if (tokens.size() > 9) {
             if (tokens.size() > 10) {
-                std::cout << "Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "14Warning: too many parameters, parameters were truncated" << std::endl;
                 std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
             }
 
@@ -514,6 +524,283 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
             std::cout << "Error: Not enough parameters, please provide [f, a, n, f]" << std::endl;
             return nullptr;
         }
+    } else if (name == "screen") {
+        if (tokens.size() > 2) {
+            if (tokens.size() > 3) {
+                std::cout << "15Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 3; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\"" << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            return new ScreenCommand(params[0], params[1], *this);
+        }
+    } else if (name == "orthocamera") {
+        delete cam;
+        cam = new OrthoCamera();
+    } else if (name == "camera") {
+        if (tokens.size() > 14) {
+            if (tokens.size() > 15) {
+                std::cout << "16Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 15; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            delete cam;
+            cam = new PerspCamera(Vector3(params[0], params[1], params[2]),
+                                    Vector3(params[3], params[4], params[5]),
+                                    Vector3(params[6], params[7], params[8]),
+                                    params[9], params[10], params[11], params[12], params[13], *this);
+        }
+    } else if (name == "background") {
+        if (tokens.size() > 3) {
+            if (tokens.size() > 4) {
+                std::cout << "17Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 4; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                            if (num > 1) {
+                                std::cout << "Error: color out of range [0, 1]" << std::endl;
+                                return nullptr;
+                            }
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            background = Vector3(params[0], params[1], params[2]);
+        }
+    } else if (name == "sphere") {
+        if (tokens.size() > 10) {
+            if (tokens.size() > 14) {
+                std::cout << "18Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 11; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            if (tokens.size() > 13) {
+                for (size_t i = 11; i < 14; ++i) {
+                    float num = 0;
+                    if (i < tokens.size()) {
+                        std::string token = tokens[i];
+                        if (token != "") {
+                            try {
+                                num = std::stof(token);
+                            } catch (const std::invalid_argument &e) {
+                                std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                          << std::endl;
+                                return nullptr;
+                            } catch (const std::out_of_range &e) {
+                                std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                          << std::endl;
+                                return nullptr;
+                            }
+                        }
+                    }
+                    params.push_back(num);
+                }
+            } else {
+                for (int i = 0; i < 3; ++i) {
+                    params.push_back(0);
+                }
+            }
+
+            shapes.push_back(new Sphere(params[0],
+                                        Vector3(params[1], params[2], params[3]),
+                                        Vector3(params[4], params[5], params[6]),
+                                        Vector3(params[7], params[8], params[9]),
+                                        Vector3(params[10], params[11], params[12])));
+        }
+    } else if (name == "triangle") {
+        if (tokens.size() > 15) {
+            if (tokens.size() > 16) {
+                std::cout << "19Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 16; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            shapes.push_back(new Triangle(Vector3(params[0], params[1], params[2]),
+                     Vector3(params[3], params[4], params[5]),
+                     Vector3(params[6], params[7], params[8]),
+                     Vector3(params[9], params[10], params[11]),
+                     Vector3(params[12], params[13], params[14])));
+        }
+    } else if (name == "box") {
+        if (tokens.size() > 12) {
+            if (tokens.size() > 13) {
+                std::cout << "20Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 13; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+//            shapes.push_back(new Box(Vector3(params[0], params[1], params[2]),
+//                                     Vector3(params[3], params[4], params[5]),
+//                                     Vector3(params[6], params[7], params[8]),
+//                                     Vector3(params[9], params[10], params[11])));
+        }
+    } else if (name == "ilight") {
+        if (tokens.size() > 6) {
+            if (tokens.size() > 7) {
+                std::cout << "21Warning: too many parameters, parameters were truncated" << std::endl;
+                std::cout << "(Be sure to only have 1 delimiting character between values)" << std::endl;
+            }
+
+            std::vector<float> params;
+
+            for (size_t i = 1; i < 7; ++i) {
+                float num = 0;
+                if (i < tokens.size()) {
+                    std::string token = tokens[i];
+                    if (token != "") {
+                        try {
+                            num = std::stof(token);
+                        } catch (const std::invalid_argument &e) {
+                            std::cout << "Error: invalid parameter " << token << " in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        } catch (const std::out_of_range &e) {
+                            std::cout << "Error: parameter " << token << " out of range in line \"" << line << "\""
+                                      << std::endl;
+                            return nullptr;
+                        }
+                    }
+                }
+                params.push_back(num);
+            }
+
+            lights.push_back(Light(Vector3(params[0], params[1], params[2]),
+                                   Vector3(params[3], params[4], params[5])));
+        }
+    } else if (name == "clear") {
+        return new ClearCommand(*this);
+    } else if (name == "trace") {
+        return new TraceCommand(*this);
     }
 
     return nullptr;
@@ -522,5 +809,12 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
 void CLI::tolower(std::string& token) {
     for (char& c : token) {
         c = std::tolower(c);
+    }
+}
+
+CLI::~CLI() {
+    delete cam;
+    for (auto shape : shapes) {
+        delete shape;
     }
 }
