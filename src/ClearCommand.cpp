@@ -11,6 +11,7 @@ void ClearCommand::execute() {
         delete shape;
     }
     cli.shapes.clear();
+    cli.lights.clear();
     cli.hasImage = false;
     glutPostRedisplay();
 }

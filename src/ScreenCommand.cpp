@@ -8,6 +8,7 @@ void ScreenCommand::execute() {
     glutReshapeWindow((int)width, (int)height);
     cli.width = width;
     cli.height = height;
+    glutPostRedisplay();
 }
 
 std::string ScreenCommand::toString() const {

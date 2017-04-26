@@ -759,10 +759,10 @@ Command* CLI::parseCommand(std::string& line, bool inFile) {
                 params.push_back(num);
             }
 
-//            shapes.push_back(new Box(Vector3(params[0], params[1], params[2]),
-//                                     Vector3(params[3], params[4], params[5]),
-//                                     Vector3(params[6], params[7], params[8]),
-//                                     Vector3(params[9], params[10], params[11])));
+            shapes.push_back(new Box(Vector3(params[0], params[1], params[2]),
+                                     Vector3(params[3], params[4], params[5]),
+                                     Vector3(params[6], params[7], params[8]),
+                                     Vector3(params[9], params[10], params[11])));
         }
     } else if (name == "ilight") {
         if (tokens.size() > 6) {
